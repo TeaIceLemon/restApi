@@ -3,6 +3,7 @@ package pl.cwiczenia.restApi.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.cwiczenia.restApi.model.Comment;
 import pl.cwiczenia.restApi.model.Post;
 import pl.cwiczenia.restApi.repository.CommentRepository;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
 
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 5;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
@@ -49,4 +50,20 @@ public class PostService {
         return postRepository.findById(id);
     }
 
+    public Post addPost(Post post) {
+            return postRepository.save(post);
+    }
+
+    @Transactional
+    public Post editPost(Post post) {
+        Post postEdited =  postRepository.findById(post.getId()).orElseThrow();
+        postEdited.setContent(post.getContent());
+        postEdited.setCreated(post.getCreated());
+        postEdited.setTitle(post.getTitle());
+        return postEdited;
+    }
+
+    public void deletePost(long id) {
+        postRepository.deleteById(id);
+    }
 }

@@ -12,13 +12,13 @@ import java.util.List;
 @Setter
 public class Post {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String content;
     private LocalDateTime created;
 
-    @OneToMany
-    @JoinColumn(name = "postId")
+    @OneToMany(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "postId", updatable = false, insertable = false)
     private List<Comment> comment;
 }
